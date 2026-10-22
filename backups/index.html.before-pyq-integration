@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d19">
+<title>JEE PYQ ARENA | Practice</title>
+<style>
+:root{color-scheme:dark;--bg:#080d19;--panel:#111a2c;--line:#26344d;--text:#edf3ff;--muted:#9aabc5;--blue:#78a6ff;--green:#39d6a0}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#172747,var(--bg) 65%);color:var(--text);font:16px system-ui,sans-serif;min-height:100vh}
+header{padding:22px 16px 16px;max-width:850px;margin:auto}
+.brand{font-size:12px;letter-spacing:3px;color:var(--blue);font-weight:800}
+h1{font-size:clamp(27px,7vw,42px);margin:8px 0}
+p{color:var(--muted);line-height:1.6}
+main{max-width:850px;margin:auto;padding:0 14px 32px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button,select{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+.sub,.option,.action{border:1px solid var(--line);border-radius:12px;padding:13px;background:#0b1323;color:var(--text)}
+.sub.active{border-color:var(--blue);background:#1b2d4d}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#0b1323;border-radius:12px;padding:12px;text-align:center}
+.stat strong{display:block;font-size:23px}
+.small{font-size:12px;color:var(--muted)}
+#question{font-size:20px;line-height:1.5;margin:14px 0}
+.options{display:grid;gap:9px}
+.option{text-align:left;width:100%;min-height:48px}
+.option:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.option.correct{border-color:var(--green);background:#10352f}
+.option.wrong{border-color:#ff7c8b;background:#3a202c}
+.option:disabled{cursor:default;opacity:1}
+.actions{display:flex;gap:10px;margin-top:15px}
+.action{flex:1;background:#21395f;border-color:#42669b;font-weight:700}
+.action.secondary{background:transparent}
+#feedback{min-height:26px;line-height:1.5;margin-top:12px}
+footer{text-align:center;padding:8px 18px 28px;color:var(--muted);font-size:12px}
+@media(max-width:420px){.panel{padding:14px}.subjects{gap:6px}.sub{padding:11px 4px;font-size:13px}.stats strong{font-size:20px}}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">YOUR DAILY JEE PRACTICE</div>
+<h1>JEE PYQ <span style="color:var(--blue)">ARENA</span></h1>
+<p>Practice smart. Track progress. Get exam-ready, one question at a time.</p>
+</header>
+<main>
+<section class="panel">
+<div class="subjects">
+<button class="sub active" data-sub="Physics">⚡ Physics</button>
+<button class="sub" data-sub="Chemistry">🧪 Chemistry</button>
+<button class="sub" data-sub="Maths">📐 Maths</button>
+</div>
+</section>
+<section class="panel">
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><span class="small">Attempted</span></div>
+<div class="stat"><strong id="score">0</strong><span class="small">Correct</span></div>
+<div class="stat"><strong id="percent">0%</strong><span class="small">Accuracy</span></div>
+</div>
+</section>
+<section class="panel">
+<div class="small" id="progress">PHYSICS · QUESTION 1</div>
+<div id="question">Loading question...</div>
+<div class="options" id="options"></div>
+<div id="feedback" role="status" aria-live="polite"></div>
+<div class="actions">
+<button class="action secondary" id="restart">Restart</button>
+<button class="action" id="next">Next question →</button>
+</div>
+</section>
+<p class="small">Starter practice set · Questions are illustrative practice, not verified official JEE PYQs.</p>
+</main>
+<footer>JEE PYQ ARENA · Free practice · Built for mobile</footer>
+<script>
+const bank={
+Physics:[
+["SI unit of electric current is?",["Volt","Ampere","Ohm","Watt"],1,"Electric current is measured in amperes (A)."],
+["For constant speed, acceleration is?",["Zero","Increasing","Negative always","Infinite"],0,"Constant velocity has zero acceleration; constant speed alone need not mean zero acceleration."],
+["Dimensional formula of force is?",["MLT⁻¹","ML²T⁻²","MLT⁻²","M⁰LT⁻²"],2,"Force = mass × acceleration, so its dimensions are MLT⁻²."],
+["Which quantity is a scalar?",["Force","Velocity","Displacement","Energy"],3,"Energy has magnitude only, so it is a scalar."],
+["The slope of a velocity-time graph gives?",["Distance","Acceleration","Momentum","Force"],1,"The slope of a velocity-time graph is acceleration."]
+],
+Chemistry:[
+["Atomic number equals the number of?",["Neutrons","Protons","Nucleons","Shells"],1,"Atomic number is the number of protons in the nucleus."],
+["pH of a neutral aqueous solution at 25°C is?",["0","5","7","14"],2,"At 25°C, a neutral aqueous solution has pH 7."],
+["Which bond involves sharing electron pairs?",["Ionic","Covalent","Metallic only","Hydrogen only"],1,"Covalent bonds form through sharing electron pairs."],
+["Avogadro constant is approximately?",["6.022×10²³","3×10⁸","9.8","1.6×10⁻¹⁹"],0,"One mole contains approximately 6.022×10²³ entities."],
+["The most electronegative element is?",["Oxygen","Chlorine","Fluorine","Nitrogen"],2,"Fluorine is the most electronegative element."]
+],
+Maths:[
+["Derivative of x² is?",["x","2x","x³","2"],1,"Using the power rule, d(x²)/dx = 2x."],
+["Sum of angles in a triangle is?",["90°","180°","270°","360°"],1,"The interior angles of a Euclidean triangle sum to 180°."],
+["Value of sin 30° is?",["1","√3/2","1/2","0"],2,"sin 30° = 1/2."],
+["Roots of x² − 5x + 6 = 0 are?",["1, 6","2, 3","−2, −3","0, 6"],1,"Factor: (x − 2)(x − 3) = 0."],
+["Determinant of [[1,0],[0,1]] is?",["0","1","2","−1"],1,"The identity matrix has determinant 1."]
+]};
+let subject="Physics",index=0,attempted=0,correct=0,locked=false,questions=[];
+const $=id=>document.getElementById(id);
+function loadSubject(s){subject=s;index=0;questions=bank[s];locked=false;document.querySelectorAll(".sub").forEach(b=>b.classList.toggle("active",b.dataset.sub===s));render()}
+function render(){
+const q=questions[index];locked=false;
+$("progress").textContent=subject.toUpperCase()+" · QUESTION "+(index+1)+" / "+questions.length;
+$("question").textContent=q[0];$("feedback").textContent="";
+$("options").replaceChildren();
+q[1].forEach((answer,i)=>{const b=document.createElement("button");b.className="option";b.textContent=String.fromCharCode(65+i)+". "+answer;b.addEventListener("click",()=>choose(i));$("options").append(b)});
+$("next").textContent=index===questions.length-1?"Restart set ↻":"Next question →";
+}
+function choose(i){
+if(locked)return;locked=true;attempted++;
+const q=questions[index];const ok=i===q[2];if(ok)correct++;
+[...$("options").children].forEach((b,n)=>{b.disabled=true;if(n===q[2])b.classList.add("correct");if(n===i&&!ok)b.classList.add("wrong")});
+$("feedback").textContent=(ok?"✓ Correct! ":"✗ Not quite. ")+q[3];
+$("total").textContent=attempted;$("score").textContent=correct;$("percent").textContent=Math.round(correct/attempted*100)+"%";
+}
+document.querySelectorAll(".sub").forEach(b=>b.addEventListener("click",()=>loadSubject(b.dataset.sub)));
+$("next").addEventListener("click",()=>{if(index===questions.length-1){index=0}else{index++}render()});
+$("restart").addEventListener("click",()=>loadSubject(subject));
+loadSubject(subject);
+</script>
+</body>
+</html>

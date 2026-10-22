@@ -1,0 +1,52 @@
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT / "data" / "questions.json"
+OUTPUT = ROOT / "data" / "practice_questions.json"
+
+TARGETS = {
+    "Physics": 232,
+    "Chemistry": 262,
+    "Mathematics": 199,
+}
+
+TOPICS = {
+    "Physics": [
+        "Mechanics", "Work, Energy and Power", "Rotational Motion",
+        "Gravitation", "Thermodynamics", "Oscillations and Waves",
+        "Electrostatics", "Current Electricity", "Magnetism",
+        "Electromagnetic Induction", "Optics", "Modern Physics",
+        "Units and Measurements", "Kinematics"
+    ],
+    "Chemistry": [
+        "Mole Concept", "Atomic Structure", "Periodic Table",
+        "Chemical Bonding", "Thermodynamics", "Equilibrium",
+        "Electrochemistry", "Chemical Kinetics", "Coordination Compounds",
+        "Organic Chemistry", "Hydrocarbons", "Solutions",
+        "p-Block", "d- and f-Block", "Biomolecules"
+    ],
+    "Mathematics": [
+        "Sets and Functions", "Complex Numbers", "Quadratic Equations",
+        "Matrices and Determinants", "Permutations and Combinations",
+        "Binomial Theorem", "Sequences and Series", "Limits and Continuity",
+        "Differentiation", "Integration", "Differential Equations",
+        "Coordinate Geometry", "Straight Lines and Circles",
+        "Vectors and 3D Geometry", "Probability", "Trigonometry"
+    ],
+}
+
+def main():
+    existing = json.loads(SOURCE.read_text(encoding="utf-8"))
+    counts = {s: sum(q.get("subject") == s for q in existing) for s in TARGETS}
+
+    print("Existing question counts:")
+    for subject, target in TARGETS.items():
+        print(f"{subject}: {counts[subject]} existing; {target} extra needed")
+
+    print("\nGenerator scaffold checked.")
+    print("No new questions written yet.")
+    print("Reason: each question needs a defensible answer key and solution.")
+
+if __name__ == "__main__":
+    main()
