@@ -102,9 +102,9 @@ function render() {
   show.id="showSolution"; show.className="action secondary";
   show.textContent="Show solution";
   saved.after(show);
-  const sol=document.createElement("div"); sol.id="solution"; show.after(sol);
+  const sol=document.createElement("div"); sol.id="solution"; show.after(sol); sol.style.whiteSpace="pre-wrap"; sol.style.lineHeight="1.65";
   const si=document.createElement("div"); si.id="simages"; sol.after(si);
-  show.onclick=()=>{sol.textContent=q.solution || (q.numerical_answer != null && q.numerical_answer !== "" ? "Numerical answer: "+q.numerical_answer : "No solution is provided in the source for this question.");showImages("simages",q.solution_images);};
+      show.onclick=()=>{const raw=q.solution || (q.numerical_answer != null && q.numerical_answer !== "" ? "Numerical answer: "+q.numerical_answer : "No solution is provided in the source for this question."); sol.textContent=String(raw).replace(/\[IMAGE\]/g,"\n[Image or diagram reference]\n").replace(/\\n/g,"\n").trim(); showImages("simages",q.solution_images);};
   if (q.answer_available === false) $("feedback").textContent="Answer missing in source: practice only; not scored.";
   $("next").textContent=index===questions.length-1?"Restart filtered set 🔄":"Next question ➡️";
 }
