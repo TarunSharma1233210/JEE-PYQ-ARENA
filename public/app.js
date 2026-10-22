@@ -1,3 +1,4 @@
+function typesetMath(el,n=0){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(()=>{});}else if(n<50){setTimeout(()=>typesetMath(el,n+1),100);}}
 const $ = id => document.getElementById(id);
 let all = [], questions = [], index = 0, subject = "Physics";
 let attempted = 0, correct = 0, locked = false;
@@ -92,6 +93,7 @@ function render() {
     b.textContent=String.fromCharCode(65+i)+". "+answer;
     b.addEventListener("click",()=>choose(i));
     $("options").append(b);
+    typesetMath(b);
   });
   const saved=document.createElement("button");
   saved.id="saveQuestion"; saved.className="action secondary";
@@ -104,7 +106,7 @@ function render() {
   saved.after(show);
   const sol=document.createElement("div"); sol.id="solution"; show.after(sol); sol.style.whiteSpace="pre-wrap"; sol.style.lineHeight="1.65";
   const si=document.createElement("div"); si.id="simages"; sol.after(si);
-      show.onclick=()=>{const raw=q.solution || (q.numerical_answer != null && q.numerical_answer !== "" ? "Numerical answer: "+q.numerical_answer : "No solution is provided in the source for this question."); sol.textContent=String(raw).replace(/\[IMAGE\]/g,"\n[Image or diagram reference]\n").replace(/\\n/g,"\n").trim(); showImages("simages",q.solution_images);};
+      show.onclick=()=>{const raw=q.solution || (q.numerical_answer != null && q.numerical_answer !== "" ? "Numerical answer: "+q.numerical_answer : "No solution is provided in the source for this question."); sol.textContent=String(raw).replace(/\[IMAGE\]/g,"\n[Image or diagram reference]\n").replace(/\\n/g,"\n").trim(); showImages("simages",q.solution_images); typesetMath(sol);};
   if (q.answer_available === false) $("feedback").textContent="Answer missing in source: practice only; not scored.";
   $("next").textContent=index===questions.length-1?"Restart filtered set 🔄":"Next question ➡️";
 }
